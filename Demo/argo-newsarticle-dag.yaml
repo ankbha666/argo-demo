@@ -1,0 +1,73 @@
+apiVersion: argoproj.io/v1alpha1
+kind: Workflow
+metadata:
+  generateName: dag-news-
+spec:
+  entrypoint: news
+  templates:
+  - name: echo
+    inputs:
+      parameters:
+      - name: message
+    container:
+      image: alpine:3.12.0
+      command: [echo, "{{inputs.parameters.message}}"]
+  - name: copy-blob
+    inputs:
+      parameters:
+      - name: decision
+    container:
+      image: rahulrai/copyblobsrcdest:latest
+      command: ["dotnet", "TransferFiles.dll", "", "{{inputs.parameters.decision}}"] 
+  - name: waitforeditor
+    suspend: {}
+  - name: news
+    dag:
+      tasks:
+      - name: draft
+        template: echo
+        arguments:
+          parameters: [{name: message, value: "New article received in draft state"}]
+      - name: requestreview
+        dependencies: [draft]
+        template: echo
+        arguments:
+          parameters: [{name: message, value: "Requesting review of the draft"}]
+      - name: waitingforjournalist
+        dependencies: [spellcheckerapproval]
+        template: waitforeditor
+      - name: waitingforspellchecker
+        dependencies: [requestreview]
+        template: echo
+        arguments:
+          parameters: [{name: message, value: "Draft is waiting for spelling and grammar checks"}]
+      - name: journalistapproval
+        dependencies: [waitingforjournalist]
+        template: copy-blob
+        arguments:
+          parameters: [{name: decision, value: "Y"}]
+      - name: spellcheckerapproval
+        dependencies: [waitingforspellchecker]
+        template: echo
+        arguments:
+          parameters: [{name: message, value: "Spell check running"}]
+      - name: approvedbyjournalist
+        dependencies: [journalistapproval]
+        template: echo
+        arguments:
+          parameters: [{name: message, value: "Editor working on article"}]
+      - name: approvedbyspellchecker
+        dependencies: [spellcheckerapproval]
+        template: echo
+        arguments:
+          parameters: [{name: message, value: "Spelling and grammar check passed"}]
+      - name: publish
+        dependencies: [approvedbyjournalist,approvedbyspellchecker]
+        template: echo
+        arguments:
+          parameters: [{name: message, value: "Publishing article"}]
+      - name: published
+        dependencies: [publish]
+        template: echo
+        arguments:
+          parameters: [{name: message, value: "Published"}]

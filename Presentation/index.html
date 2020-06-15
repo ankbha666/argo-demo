@@ -1,0 +1,371 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="utf-8" />
+
+    <title>Building Workflows on AKS with Argo</title>
+
+    <meta name="description" content="Building Workflows on AKS with Argo" />
+    <meta name="author" content="Rahul Rai" />
+
+    <meta name="apple-mobile-web-app-capable" content="yes" />
+    <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent" />
+
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+
+    <link rel="stylesheet" href="node_modules/reveal.js/dist/reset.css" />
+    <link rel="stylesheet" href="node_modules/reveal.js/dist/reveal.css" />
+    <!-- <link rel="stylesheet" href="node_modules/reveal.js/dist/theme/black.css" id="theme" /> -->
+    <link rel="stylesheet" href="css/theme/robot-lung.css" id="theme" />
+
+
+    <script src="https://kit.fontawesome.com/43bb6472f8.js" crossorigin="anonymous"></script>
+
+
+    <!-- Theme used for syntax highlighting of code -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/10.0.3/styles/googlecode.min.css"
+        id="highlight-theme">
+</head>
+
+<body>
+    <div class="line top"></div>
+    <div class="line bottom"></div>
+    <div class="line left"></div>
+    <div class="line right"></div>
+    <div class="reveal">
+        <div class="slides">
+            <section>
+                <img src="img/argo.png" alt="reveal.js logo"
+                    style="height: 180px; margin: 10 auto 4rem auto; background: transparent; border:none; box-shadow: none;">
+                <img src="img/aks.png" alt="reveal.js logo"
+                    style="height: 120px; margin: 0 auto 4rem auto; background: transparent; border:none; box-shadow: none;">
+                <h3>Building Workflows on AKS with Argo</h3>
+                <p>
+                    <div style="display: flex; align-items: center;justify-content: center;">
+                        <div style="flex: 70%;text-align: center;">
+                            <small><b>Tarun Pabbi</b>&nbsp;
+                                <i class="fab fa-twitter fa-2x"
+                                    style="color: #1da1f2; font-size: 1em;"></i>&nbsp;tarunpabbi7</small>&emsp;
+                            <small><b>Rahul Rai</b> &nbsp;
+                                <i class="fab fa-twitter fa-2x"
+                                    style="color: #1da1f2; font-size: 1em;"></i>&nbsp;rahulrai_in</small>
+                            <br />
+                            <small><a href="https://syncfusion.com/ebooks">syncfusion.com/ebooks</a></small>
+                        </div>
+                        <div style="flex: 30%;">
+                            <img src="img/books.png" alt="books"
+                                style="width: 100%; margin: 0 auto 4rem auto; background: transparent; border:none; box-shadow: none;">
+                        </div>
+                    </div>
+                </p>
+            </section>
+            <section>
+                <h3> Azure Kubernetes Service </h3>
+                <div style="text-align: left">
+                    Managed Kubernetes cluster in Azure <br />
+                    Pay and manage the workload nodes <br />
+                    Supports Windows and Linux containers <br />
+                </div>
+            </section>
+            <section>
+                <h3> Workflows in Azure </h3>
+                <div style="text-align: left">
+                    <h5 style="text-transform:none">PaaS</h5>
+                    Azure Logic Apps<br />
+                    Azure Durable Functions<br /> <br />
+                    <h5>AKS</h5>
+                    Azure Durable Functions on Containers<br />
+                    Apache Airflow<br />
+                    Argo Workflows<br />
+                </div>
+            </section>
+            <section>
+                <h3> Selecting a Workflow Solution </h3>
+                <div style="text-align: left">
+                    <h5>Development</h5>
+                    Low barrier to entry <br />
+                    Tight coupling with Kubernetes: logs, metrics, secrets <br />
+                    Use existing investments in DevOps <br /><br />
+                    <h5>Operations</h5>
+                    Workflow orchestration decoupled from execution\steps <br />
+                    Reuse steps across workflows <br />
+                    Scale with volume <br />
+                </div>
+            </section>
+            <section>
+                <h3>Argo</h3>
+                <div style="text-align: left">
+                    Open source projects built by Intuit <br />
+                    CNCF incubating project <br />
+                    Four independent components: Workflows, CD, Rollouts, Events <br />
+                    Community with marquee names: Adobe, Google, GitHub etc. <br />
+                </div>
+                <div name="speaker-prompt" style="text-align: right;color: green;">
+                    <small>.</small>
+                </div>
+            </section>
+            <section>
+                <h3>Argo CD</h3>
+                <div style="text-align: left">
+                    GitOps CD tool for Kubernetes <br />
+                    Automates deployment of desired application states to target environments <br />
+                </div>
+                <div name="speaker-prompt" style="text-align: right;color: green;">
+                    <small>.</small>
+                </div>
+            </section>
+            <section>
+                <h3>Argo Rollouts</h3>
+                <div style="text-align: left">
+                    Enhances Kubernetes deployment with CRD - Rollouts <br />
+                    Blue-Green & Canary<br />
+                    Declarative, configurable, GitOps-friendly options<br />
+                </div>
+                <div name="speaker-prompt" style="text-align: right;color: green;">
+                    <small>.</small>
+                </div>
+            </section>
+            <section>
+                <h3>Argo Events</h3>
+                <div style="text-align: left">
+                    Triggers K8s objects, Workflows, Functions on events <br />
+                    Support for sources such as Webhooks, S3, GCP PubSub, Azure EventHub, SQS
+                </div>
+                <div name="speaker-prompt" style="text-align: right;color: green;">
+                    <small>.</small>
+                </div>
+            </section>
+            <section data-state="timer">
+                <h1>Questions?</h1>
+                <h2 id="countdown"></h2>
+            </section>
+            <section>
+                <h3>Argo Workflows</h3>
+                <div style="text-align: left">
+                    Container native workflow engine for Kubernetes <br />
+                    Workflow and Events defined as CRD <br />
+                    Cloud agnostic<br />
+                    Orchestrate highly parallel jobs <br />
+                    Cloud scale supercomputer <br />
+                    Tight affinity with K8s resources: Secrets, ConfigMaps, Volumes<br />
+                    Utilizes K8s features: affinity, toleration, resource limit
+                </div>
+            </section>
+            <section>
+                <h3>Workflow</h3>
+                <div style="display: flex;width:60vw;height: 100%;align-items: center;justify-content: center; ">
+                    <div style="flex: 40%;text-align: left;">
+                        YAML definitions<br /><br />
+                        "Templates" are workflow steps<br /><br />
+                        Declare DAG and dependencies<br />
+                    </div>
+                    <div style="flex: 60%;vertical-align: top;">
+                        <img src="img/workflow-structure.png"
+                            style="height: 100%; width:100%; background: transparent; border:none; box-shadow: none;" />
+                    </div>
+                </div>
+            </section>
+            <section>
+                <h3>Workflow CLI</h3>
+                <img src="img/argo commands.png"
+                    style="height: 100%; width:100%; background: transparent; border:none; box-shadow: none;" />
+            </section>
+            <section>
+                <h3>Beyond The Basics</h3>
+                <div style="text-align: left">
+                    Passing parameters <br />
+                    <img src="img/parameter-passing.png"
+                        style="width:100%; background: transparent; border:none; box-shadow: none;" />
+                    Artifacts <br />
+                    <div style="display: flex;">
+                        <div style="flex: 50%;text-align: left;">
+                            <img src="img/export-artifact.png"
+                                style="width:100%; background: transparent; border:none; box-shadow: none;" />
+                        </div>
+                        <div style="flex: 50%;text-align: left;">
+                            <img src="img/import-artifact.png"
+                                style="width:100%; background: transparent; border:none; box-shadow: none;" />
+                        </div>
+                    </div>
+                </div>
+                <div name="speaker-prompt" style="text-align: right;color: green;">
+                    <small>.</small>
+                </div>
+            </section>
+            <section>
+                <h3>Beyond The Basics</h3>
+                <div style="text-align: left">
+                    Memoized resubmission <br />
+                    <img src="img/resubmit-memoize.png"
+                        style="background: transparent; border:none; box-shadow: none;" />
+                    <br />
+                    Suspend & Resume <br />
+                    <div style="display: flex;">
+                        <div style="flex: 50%;text-align: left;">
+                            <img src="img/suspend-resume.png"
+                                style="background: transparent; border:none; box-shadow: none;" />
+                        </div>
+                        <div style="flex: 50%;text-align: left;">
+                            <img src="img/task-suspend.png"
+                                style="background: transparent; border:none; box-shadow: none;" />
+                        </div>
+                    </div>
+                </div>
+                <div name="speaker-prompt" style="text-align: right;color: green;">
+                    <small>.</small>
+                </div>
+            </section>
+            <section>
+                <h3>Even More?</h3>
+                <div style="text-align: left">
+                    Sidecars and Daemon containers <br />
+                    All DAG features: conditions, subroutines, loops, recursion<br />
+                    Generate DAG with code <br />
+                    Notify on complete with post-run hooks<br />
+                    Create new K8s resources <br />
+                </div>
+                <div name="speaker-prompt" style="text-align: right;color: green;">
+                    <small>.</small>
+                </div>
+            </section>
+            <section>
+                <h3>Deployment Models</h3>
+                <img style="width: 100%;" src="img/argo-deployment-models.jpg" />
+                <figcaption style="text-align: center"><small>source: Argo</small></figcaption>
+            </section>
+            <section>
+                <h3>Workflow Triggers</h3>
+                <div style="text-align: left">
+                    Manual & scheduled <br /><br />
+                    Event based (Argo Events)<br />
+                    <ul>
+                        <li>K8s events</li>
+                        <li>GitHub, Slack, Webhooks</li>
+                        <li>Cloud resource: Az Event Hub, GCP PubSub, AWS SQS</li>
+                    </ul>
+                    <br /><br />
+                    Argo REST API (for unsupported events)
+                </div>
+            </section>
+            <section>
+                <h3>Workflow UI</h3>
+                <img style="height: 25vw;width:100%;" src="img/argo-ui.png" />
+                <figcaption style="text-align: center"><small>source: argoproj.io</small></figcaption>
+            </section>
+            <section data-state="timer">
+                <h1>Questions?</h1>
+                <h2 id="countdown"></h2>
+            </section>
+            <section style="text-align: left;">
+                <h1>Demo</h1>
+                <p>
+                    - Source code: <a href="https://bit.ly/argo_demo">https://bit.ly/argo_demo</a><br />
+                </p>
+                <p style="text-align: center;">
+                    <img src="img/workflow.svg" style="background: transparent; border:none; box-shadow: none;" />
+                </p>
+                <div name="speaker-prompt" style="text-align: right;color: green;">
+                    <small>.</small>
+                </div>
+            </section>
+            <section>
+                <h3>Continuous Deployment</h3>
+                <div style="text-align: left">
+                    Use existing deployment strategies<br />
+                    Package and upgrade with Helm<br />
+                    Deployment and rollback is easy
+                </div>
+                <div name="speaker-prompt" style="text-align: right;color: green;">
+                    <small>.</small>
+                </div>
+            </section>
+            <section>
+                <h1>Try It Yourself</h1>
+                <p style="text-align: left;">
+                    Everything you saw today: <a
+                        href="https://bit.ly/argo_demo">https://bit.ly/argo_demo</a><br /><br />
+                    <b>Tarun Pabbi</b>&nbsp;
+                    <i class="fab fa-twitter fa-2x" style="color: #1da1f2; font-size: 1em;"></i>&nbsp;tarunpabbi7&emsp;
+                    <b>Rahul Rai</b> &nbsp;
+                    <i class="fab fa-twitter fa-2x" style="color: #1da1f2; font-size: 1em;"></i>&nbsp;rahulrai_in
+                </p>
+            </section>
+        </div>
+
+    </div>
+    </div>
+
+    <script src="node_modules/reveal.js/dist/reveal.js"></script>
+    <script src="node_modules/reveal.js/plugin/zoom/zoom.js"></script>
+    <script src="node_modules/reveal.js/plugin/notes/notes.js"></script>
+    <script src="node_modules/reveal.js/plugin/search/search.js"></script>
+    <script src="node_modules/reveal.js/plugin/markdown/markdown.js"></script>
+    <script src="node_modules/reveal.js/plugin/highlight/highlight.js"></script>
+    <script>
+        // Also available as an ES module, see:
+        // https://revealjs.com/initialization/
+        Reveal.initialize({
+            slideNumber: "c",
+            showSlideNumber: 'all',
+            controls: true,
+            progress: true,
+            center: true,
+            hash: true,
+            margin: 0.2,
+            transitionSpeed: 'slow', // default/fast/slow
+            transition: 'convex', // none/fade/slide/convex/concave/zoom
+
+            // Learn about plugins: https://revealjs.com/plugins/
+            plugins: [
+                RevealZoom,
+                RevealNotes,
+                RevealSearch,
+                RevealMarkdown,
+                RevealHighlight,
+            ],
+        });
+    </script>
+    <script>
+        const TIME_LIMIT = 180;
+        let timerInterval = null;
+
+        function formatTimeLeft(time) {
+            const minutes = Math.floor(time / 60);
+            let seconds = time % 60;
+            if (seconds < 0) {
+                clearInterval(timerInterval);
+                return '0:00';
+            }
+
+            if (seconds < 10) {
+                seconds = `0${seconds}`;
+            }
+
+            return `${minutes}:${seconds}`;
+        }
+
+        function startTimer() {
+            timerInterval = setInterval(() => {
+                timePassed = timePassed += 1;
+                timeLeft = TIME_LIMIT - timePassed;
+                var items = document.querySelectorAll("#countdown");
+                for (var i = 0; i < items.length; i++) {
+                    items[i].innerHTML = formatTimeLeft(timeLeft);
+                }
+            }, 1000);
+        }
+
+        Reveal.addEventListener('timer', function () {
+            if (timerInterval) {
+                clearInterval(timerInterval);
+            }
+
+            timePassed = 0;
+            timeLeft = TIME_LIMIT;
+            startTimer();
+        });
+    </script>
+</body>
+
+</html>
