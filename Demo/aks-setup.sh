@@ -1,6 +1,6 @@
 #Create AKS cluster
 az login
-az group create --name news-article-store-rg --location australiaeast
+az group create --name news-article-store-rg --location southeastasia
 az aks create -n argo-demo --node-count 1 --node-vm-size Standard_DS2_v2 --load-balancer-sku basic --node-osdisk-size 32 --resource-group news-article-store-rg --generate-ssh-keys
 az aks get-credentials --resource-group news-article-store-rg --name argo-demo
 
